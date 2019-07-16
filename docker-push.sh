@@ -1,6 +1,6 @@
 #!/bin/bash
 
-IMAGES=(php-7.1 php-7.2 php-7.3)
+IMAGES=(php-5.6 php-7.1 php-7.2 php-7.3)
 HUBUSER="cheppers"
 
 echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
