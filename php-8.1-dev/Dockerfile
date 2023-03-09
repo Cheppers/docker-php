@@ -1,17 +1,5 @@
 FROM webdevops/php-dev:8.1
-RUN apt-install mariadb-client jq lsb-release ca-certificates curl
-
-#RUN apt update && \
-#    apt-install software-properties-common && \
-#    rm -rf /var/lib/apt/lists/* && \
-#    add-apt-repository ppa:ondrej/php
-
-RUN curl -sSLo /usr/share/keyrings/deb.sury.org-php.gpg https://packages.sury.org/php/apt.gpg
-RUN sh -c 'echo "deb [signed-by=/usr/share/keyrings/deb.sury.org-php.gpg] https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list'
-
-RUN apt update && \
-    apt-install php8.1-dev
-
+RUN apt-install mariadb-client jq
 # Install nvm
 RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.39.3/install.sh | bash
 
