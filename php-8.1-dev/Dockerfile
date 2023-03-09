@@ -1,12 +1,13 @@
 FROM webdevops/php-dev:8.1
-RUN apt-get install -y mariadb-client jq
+RUN apt-install mariadb-client jq
 
-RUN apt-get update && \
-    apt-get install -y software-properties-common && \
+RUN apt update && \
+    apt-install software-properties-common && \
     rm -rf /var/lib/apt/lists/* && \
     add-apt-repository ppa:ondrej/php
 
-RUN apt-get install -y php8.1-dev
+RUN apt update && \
+    apt-install php8.1-dev
 
 # Install nvm
 RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.39.3/install.sh | bash
