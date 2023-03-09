@@ -1,5 +1,5 @@
 FROM webdevops/php-dev:8.1
-RUN apt-install mariadb-client jq
+RUN apt-install mariadb-client jq php-phpdbg
 # Install nvm
 RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.39.3/install.sh | bash
 
