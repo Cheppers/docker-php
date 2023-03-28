@@ -1,0 +1,3 @@
+
+deny	all;
+return	403;

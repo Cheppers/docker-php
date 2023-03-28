@@ -1,0 +1,5 @@
+
+rewrite_log		on;
+log_not_found	on;
+access_log		/var/log/nginx/$site_id.access.log;
+error_log		/var/log/nginx-error.log				notice;

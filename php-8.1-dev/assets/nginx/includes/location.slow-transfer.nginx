@@ -1,0 +1,6 @@
+##
+# Only include this in location{} scope.
+##
+
+expires 0;
+limit_rate 15k;

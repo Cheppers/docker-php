@@ -1,0 +1,21 @@
+##
+# Configuration for https://github.com/PeeHaa/OpCacheGUI.
+#
+# Only include this in server{} scope.
+##
+
+index index.php index.html index.htm;
+
+sendfile on;
+
+location ~ \.php$ {
+	include includes/php-options.nginx;
+}
+
+location / {
+	try_files $uri @rewrite;
+}
+
+location @rewrite {
+	rewrite ^ /index.php last;
+}

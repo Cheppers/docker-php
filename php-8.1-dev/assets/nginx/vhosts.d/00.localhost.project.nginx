@@ -1,0 +1,26 @@
+
+server {
+	server_name localhost;
+
+	set $workspace		WORKSPACE;
+	set $project_name	PROJECT_NAME;
+	set $project_root	$workspace/$project_name;
+	set $public_html	PUBLIC_HTML;
+	set $site_dir		default;
+	set $site_id		$project_name.$site_dir;
+
+	set $php_version_name	PHP_NAME-nts;
+	set $php_variant		PHP_VARIANT;
+	set $php_pool			default;
+
+	root $project_root/$public_html;
+
+	include	includes/listen.80.nginx;
+	include	includes/application.drupal-8.nginx;
+	include	includes/log.dev.nginx;
+
+	include fastcgi_params.nginx;
+	include includes/fastcgi_params.common.nginx;
+	include includes/fastcgi_params.x-sendfile.nginx;
+	include includes/vhosts.d/localhost.project.fastcgi_params.nginx;
+}

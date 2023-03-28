@@ -1,4 +1,4 @@
-FROM webdevops/php-dev:8.1
+FROM webdevops/php-nginx-dev:8.1
 RUN apt-install mariadb-client
 # Install nvm
 RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.39.3/install.sh | bash
@@ -29,5 +29,34 @@ RUN export NVM_DIR="${HOME}/.nvm" \
     && nvm use --default 14.15.4 \
 	&& npm install --global "yarn@1.15.2"
 
+RUN mkdir -p \
+		/var/log/nginx \
+		/tmp/nginx/client_body \
+		/tmp/nginx/fastcgi \
+		/tmp/nginx/proxy \
+		/tmp/nginx/scgi \
+		/tmp/nginx/uwsgi \
+  && \
+  	rm -rf /opt/docker/etc/supervisor.conf \
+  && \
+  	rm -rf /etc/nginx/ \
+  && \
+  mkdir -p \
+    /var/log/supervisor \
+	&& \
+	curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" \
+	&& \
+	unzip awscliv2.zip \
+	&& \
+	rm awscliv2.zip \
+	&& \
+	./aws/install
+
+# Override the supervisor's configuration.
+COPY assets/supervisor/supervisor.conf /opt/docker/etc/
+# Add headless cromiuim's supervisor configuration to start.
+COPY assets/supervisor/conf.d/ /opt/docker/etc/supervisor.d/
+# Add our ngix config
+COPY assets/nginx/ /etc/nginx/
 ENTRYPOINT ["/entrypoint"]
 CMD ["supervisord"]
