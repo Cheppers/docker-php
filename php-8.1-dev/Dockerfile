@@ -1,5 +1,6 @@
 FROM webdevops/php-nginx-dev:8.1
 RUN apt-install mariadb-client jq chromium
+
 # Install nvm
 RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.39.3/install.sh | bash
 
@@ -37,8 +38,6 @@ RUN mkdir -p \
 		/tmp/nginx/scgi \
 		/tmp/nginx/uwsgi \
   && \
-  	rm -rf /opt/docker/etc/supervisor.conf \
-  && \
   	rm -rf /etc/nginx/ \
   && \
   mkdir -p \
@@ -59,5 +58,7 @@ COPY assets/supervisor/conf.d/ /opt/docker/etc/supervisor.d/
 # Add our ngix config
 COPY assets/nginx/ /etc/nginx/
 
-ENTRYPOINT ["supervisord"]
-CMD ["--nodaemon", "--configuration", "/opt/docker/etc/supervisor.conf"]
+ENTRYPOINT ["/entrypoint"]
+COPY assets/docker-init.sh /bin/docker-init.sh
+RUN chmod +x /bin/docker-init.sh
+CMD ["docker-init.sh"]

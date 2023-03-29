@@ -9,7 +9,7 @@
 fastcgi_split_path_info	^(.+?\.php)(|/.*)$;
 
 fastcgi_intercept_errors	on;
-fastcgi_pass				unix:/var/run/php-fpm.$php_version_name.$php_variant.$php_pool.sock;
+fastcgi_pass				127.0.0.1:9000;
 fastcgi_read_timeout		900;
 
 fastcgi_buffering			on;
