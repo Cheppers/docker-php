@@ -58,5 +58,6 @@ COPY assets/supervisor/supervisor.conf /opt/docker/etc/
 COPY assets/supervisor/conf.d/ /opt/docker/etc/supervisor.d/
 # Add our ngix config
 COPY assets/nginx/ /etc/nginx/
-ENTRYPOINT ["/entrypoint"]
-CMD ["supervisord"]
+
+ENTRYPOINT ["supervisord"]
+CMD ["--nodaemon", "--configuration", "/opt/docker/etc/supervisor.conf"]
