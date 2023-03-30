@@ -58,7 +58,6 @@ COPY assets/supervisor/conf.d/ /opt/docker/etc/supervisor.d/
 # Add our ngix config
 COPY assets/nginx/ /etc/nginx/
 
-WORKDIR  /builds/$CI_PROJECT_PATH
 ENTRYPOINT ["/entrypoint"]
 COPY assets/docker-init.sh /bin/docker-init.sh
 RUN chmod +x /bin/docker-init.sh
