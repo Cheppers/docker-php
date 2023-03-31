@@ -22,12 +22,17 @@ RUN echo 'test -s "${HOME}/.bashrc_nvm" && . "${HOME}/.bashrc_nvm" || true' >> ~
 RUN export NVM_DIR="${HOME}/.nvm" \
 	&& . $HOME/.nvm/nvm.sh \
 	&& nvm install 11.5.0 \
-    && nvm install 12.16.1 \
-    && nvm install 14.15.4 \
-    && nvm install 16.16.0 \
-    && nvm install 18.12.0 \
-    && . ${HOME}/.bashrc_nvm \
-    && nvm use --default 14.15.4 \
+  && nvm install 12.16.1 \
+  && nvm install 14.15.4 \
+  && nvm install 16.16.0 \
+  && nvm install 18.12.0 \
+  && . ${HOME}/.bashrc_nvm \
+  && nvm -v \
+  && echo "NVM is working" \
+  && nvm use --default 14.15.4 \
+  && nvm alias default 14.15.4 \
+  && echo "NVM use is working" \
+  && whoami \
 	&& npm install --global "yarn@1.15.2"
 
 RUN mkdir -p \
