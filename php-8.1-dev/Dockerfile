@@ -1,33 +1,35 @@
-FROM webdevops/php-dev:8.1
-RUN apt-install mariadb-client jq
-# Install nvm
-RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.39.3/install.sh | bash
+FROM webdevops/php-nginx-dev:8.1
+RUN apt-install mariadb-client jq chromium
 
-RUN sed \
-		--in-place \
-		--expression='/If not running interactively/d' \
-		--expression='/\[ -z "$PS1" \] && return/d' \
-		--expression='/^export NVM_DIR/d' \
-		--expression='/ This loads nvm/d' \
-		~/.bashrc \
-	&& echo 'test -s ~/.bashrc_nvm && . ~/.bashrc_nvm || true' >> ~/.bashrc \
-	&& touch ~/.bashrc_nvm \
-	&& echo 'export NVM_DIR="${HOME}/.nvm"' >> ~/.bashrc_nvm \
-	&& echo 'test -s "${NVM_DIR}/nvm.sh" && . "${NVM_DIR}/nvm.sh" || true' >> ~/.bashrc_nvm \
-	&& echo 'test -s "${NVM_DIR}/bash_completion" && . "${NVM_DIR}/bash_completion" || true' >> ~/.bashrc_nvm \
-RUN echo 'test -s "${HOME}/.bashrc_nvm" && . "${HOME}/.bashrc_nvm" || true' >> ~/.bashrc
+RUN mkdir -p \
+		/var/log/nginx \
+		/tmp/nginx/client_body \
+		/tmp/nginx/fastcgi \
+		/tmp/nginx/proxy \
+		/tmp/nginx/scgi \
+		/tmp/nginx/uwsgi \
+  && \
+  	rm -rf /etc/nginx/ \
+  && \
+  mkdir -p \
+    /var/log/supervisor \
+	&& \
+	curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" \
+	&& \
+	unzip awscliv2.zip \
+	&& \
+	rm awscliv2.zip \
+	&& \
+	./aws/install
 
-# Install node(s) and Yarn
-RUN export NVM_DIR="${HOME}/.nvm" \
-	&& . $HOME/.nvm/nvm.sh \
-	&& nvm install 11.5.0 \
-    && nvm install 12.16.1 \
-    && nvm install 14.15.4 \
-    && nvm install 16.16.0 \
-    && nvm install 18.12.0 \
-    && . ${HOME}/.bashrc_nvm \
-    && nvm use --default 14.15.4 \
-	&& npm install --global "yarn@1.15.2"
+# Override the supervisor's configuration.
+COPY assets/supervisor/supervisor.conf /opt/docker/etc/
+# Add headless cromiuim's supervisor configuration to start.
+COPY assets/supervisor/conf.d/ /opt/docker/etc/supervisor.d/
+# Add our ngix config
+COPY assets/nginx/ /etc/nginx/
 
 ENTRYPOINT ["/entrypoint"]
-CMD ["supervisord"]
+COPY assets/docker-init.sh /bin/docker-init.sh
+RUN chmod +x /bin/docker-init.sh
+CMD ["docker-init.sh"]

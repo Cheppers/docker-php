@@ -1,0 +1,5 @@
+
+rewrite_log		off;
+log_not_found	off;
+access_log		/dev/null;
+error_log		/dev/null crit;
